@@ -120,8 +120,8 @@ describe Merchant do
       @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
       @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 2)
 
-      @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 0, created_at: "2012-03-27 14:54:09")
-      @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0, created_at: "2012-03-29 14:54:09")
+      @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 11, unit_price: 10, status: 0, created_at: "2012-03-27 14:54:09")
+      @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 0, created_at: "2012-03-29 14:54:09")
       @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2, created_at: "2012-03-28 14:54:09")
       @ii_4 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1, created_at: "2012-03-30 14:54:09")
       @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1, created_at: "2012-04-01 14:54:09")
@@ -167,6 +167,20 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it "invoice_item_total" do
+      expect(@merchant1.invoice_item_total).to eq(44.0)
+    end
+
+    it "elligible_for_discount" do
+      discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
+      expect(@merchant1.elligible_for_discount(discount.discount_quantity)).to eq([@ii_1, @ii_2])
+    end
+
+    it "apply_discount_to_item" do
+      discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
+      expect(@merchant1.apply_discount_to_item(@ii_1)).to eq(88.0)
     end
   end
 end
