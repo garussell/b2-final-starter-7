@@ -5,7 +5,7 @@ class Merchant < ApplicationRecord
   has_many :invoices, through: :invoice_items
   has_many :customers, through: :invoices
   has_many :transactions, through: :invoices
-  has_many :discounts
+  has_many :discounts, dependent: :destroy
 
   enum status: [:enabled, :disabled]
 
@@ -62,20 +62,4 @@ class Merchant < ApplicationRecord
   def disabled_items
     items.where(status: 0)
   end
-
-  # def invoice_item_total
-  #   invoice_items.sum(:unit_price)
-  # end
-
-  # def elligible_for_discount(discount_quantity)
-  #   eligible_items = invoice_items.where("quantity >= ?", discount_quantity)
-  # end 
-
-  # def apply_discount_to_item(invoice_item)
-  #     discount_perc = discounts.pluck(:discount_percentage).first
-  #     total_before_discount = invoice_item.quantity * invoice_item.unit_price
-  #     discount = discount_perc * total_before_discount
-
-  #     discounted_price = total_before_discount - discount
-  # end
 end
