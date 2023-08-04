@@ -25,6 +25,13 @@ class DiscountsController < ApplicationController
     end
   end
 
+  def destroy
+    merchant = Merchant.find(params[:merchant_id])
+    Discount.find(params[:id]).destroy
+
+    redirect_to merchant_discounts_path(merchant)
+  end
+
   private
   def discount_params
     params.require(:discount).permit(:name, :discount_quantity, :discount_percentage)
