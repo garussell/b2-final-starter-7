@@ -1,0 +1,16 @@
+<div class="ml-auto col-sm-6">
+  <section id="create_discount_form">
+    <%= form_with model: @discount, url: merchant_discounts_path(@merchant), method: :post do |form| %>
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+
+      <%= form.label :discount_quantity %>
+      <%= form.number_field :discount_quantity %>
+
+      <%= form.label :discount_percentage %>
+      <%= form.number_field :discount_percentage %>
+
+      <%= form.submit "Create Discount" %>
+    <% end %>
+  </section>
+</div>
