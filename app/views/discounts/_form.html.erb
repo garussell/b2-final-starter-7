@@ -1,0 +1,14 @@
+    <%= form_with model: @discount, url: path, method: method, local: true do |form| %>
+      <p><%= form.label :name %></p>
+      <p><%= form.text_field :name, value: value[:name] %></p>
+
+      <p><%= form.label :discount_quantity %></p>
+      <p><%= form.number_field :discount_quantity, value: value[:discount_quantity] %></p>
+
+      <p><%= form.label :discount_percentage %></p>
+      <p><%= form.number_field :discount_percentage, step: 0.10, value: value[:discount_percentage] %></p>
+
+      <p><%= form.submit %></p>
+      
+    <% end %>
+      
