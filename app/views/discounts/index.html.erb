@@ -1,0 +1,12 @@
+<%= render partial: "shared/nav" %>
+
+<div class="ml-auto col-sm-6">
+    <section id ="bulk_discounts">
+    <% @merchant.discounts.each do |discount| %>
+      <strong><%= link_to discount.name, merchant_discount_path(@merchant.id, discount) %></strong>
+      <p>Discount Quantity: <%= discount.discount_quantity %></p>
+      <p>Discount Percentage: <%= number_to_percentage(discount.discount_percentage * 100, precision: 0) %></p>
+    <% end %>
+    
+    </section>
+</div>

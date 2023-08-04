@@ -24,9 +24,9 @@ RSpec.describe "merchant dashboard" do
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
     @item_4 = Item.create!(name: "Hair tie", description: "This holds up your hair", unit_price: 1, merchant_id: @merchant1.id)
 
-    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
-    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
-    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 11, unit_price: 10, status: 0)
+    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 10, unit_price: 8, status: 0)
+    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 12, unit_price: 5, status: 2)
     @ii_4 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
     @ii_5 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
     @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
@@ -138,33 +138,36 @@ RSpec.describe "merchant dashboard" do
         expect(page).to have_current_path(merchant_discounts_path(@merchant1))
       end
 
-      xit "where I see all of my bulk discounts including their percentage discount and quantity thresholds, and each bulk discount listed includes a link to its show page" do
-        items_1 = create_list(:item, 10, merchant: @merchant1)
-        items_2 = create_list(:item, 10, merchant: @merchant1)
-        items_3 = create_list(:item, 5, merchant: @merchant1)
+      it "where I see all of my bulk discounts including their percentage discount and quantity thresholds" do
+        family_discount = @merchant1.discounts.create!(name: "Family Discount", discount_quantity: 10, discount_percentage: 0.20)
+        holiday_discount = @merchant1.discounts.create!(name: "Holiday Discount", discount_quantity: 5, discount_percentage: 0.20)
+        
+        visit merchant_discounts_path(@merchant1)
 
-        # Create invoices and associate with items
-        invoices_1 = create_list(:invoice, 10)
-        invoice_items = invoices_1.map do |invoice|
-          create(:invoice_item, item: items_1.sample, invoice: invoice)
-        end
-
-        invoices_2 = create_list(:invoice, 10)
-        invoice_items = invoices_2.map do |invoice|
-          create(:invoice_item, item: items_2.sample, invoice: invoice)
-        end
-
-        # Inelligible quanitity
-        invoices_3 = create_list(:invoice, 5)
-        invoice_items = invoices_3.map do |invoice|
-          create(:invoice_item, item: items_3.sample, invoice: invoice)
-        end
-
-        visit merchant_discounts_path
-
-        expect(page).to have_content(items_1)
-        expect(page).to have_content(items_2)
-        expect(page).to_not have_content(items_3)
+        expect(page).to have_content(family_discount.name)
+        expect(page).to have_content(family_discount.discount_quantity)
+        expect(page).to have_content("Discount Percentage: 20%")
+        expect(page).to have_content(holiday_discount.name)
+        expect(page).to have_content(holiday_discount.discount_quantity)
+        expect(page).to have_content("Discount Percentage: 20%")
+      end
+      
+      it "and each bulk discount listed includes a link to its show page" do
+        family_discount = @merchant1.discounts.create!(name: "Family Discount", discount_quantity: 10, discount_percentage: 0.20)
+        holiday_discount = @merchant1.discounts.create!(name: "Holiday Discount", discount_quantity: 5, discount_percentage: 0.20)
+        
+        visit merchant_discounts_path(@merchant1)
+        
+        expect(page).to have_link("Family Discount")
+        expect(page).to have_link("Holiday Discount")
+  
+        click_link "Family Discount"
+        expect(page).to have_current_path(merchant_discount_path(@merchant1, family_discount))
+  
+        visit merchant_discounts_path(@merchant1)
+  
+        click_link "Holiday Discount"
+        expect(page).to have_current_path(merchant_discount_path(@merchant1, holiday_discount))
       end
     end
   end
