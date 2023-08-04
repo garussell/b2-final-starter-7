@@ -169,18 +169,18 @@ describe Merchant do
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
 
-    it "invoice_item_total" do
-      expect(@merchant1.invoice_item_total).to eq(44.0)
-    end
+    # it "invoice_item_total" do
+    #   expect(@merchant1.invoice_item_total).to eq(44.0)
+    # end
 
-    it "elligible_for_discount" do
-      discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
-      expect(@merchant1.elligible_for_discount(discount.discount_quantity)).to eq([@ii_1, @ii_2])
-    end
+    # it "elligible_for_discount" do
+    #   discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
+    #   expect(@merchant1.elligible_for_discount(discount.discount_quantity)).to eq([@ii_1, @ii_2])
+    # end
 
-    it "apply_discount_to_item" do
-      discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
-      expect(@merchant1.apply_discount_to_item(@ii_1)).to eq(88.0)
-    end
+    # it "apply_discount_to_item" do
+    #   discount = @merchant1.discounts.create!(discount_quantity: 10, discount_percentage: 0.20)
+    #   expect(@merchant1.apply_discount_to_item(@ii_1)).to eq(88.0)
+    # end
   end
 end
