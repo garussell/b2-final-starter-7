@@ -3,9 +3,10 @@
 <div class="ml-auto col-sm-6">
     <section id ="bulk_discounts">
     <% @merchant.discounts.each do |discount| %>
-      <strong><%= link_to discount.name, merchant_discount_path(@merchant.id, discount) %></strong>
+      <strong><%= link_to discount.name, merchant_discount_path(@merchant, discount) %></strong>
       <p>Discount Quantity: <%= discount.discount_quantity %></p>
       <p>Discount Percentage: <%= number_to_percentage(discount.discount_percentage * 100, precision: 0) %></p>
+      <%= button_to "Delete #{discount.name}", merchant_discount_path(@merchant, discount), data: { turbo: false }, method: :delete %><br>
     <% end %>
     </section>
 </div>

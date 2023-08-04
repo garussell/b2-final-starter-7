@@ -78,6 +78,20 @@ RSpec.describe "discounts index page" do
         expect(page).to have_content(2)
         expect(page).to have_content("35%")
       end
+
+      # User Story 3
+      it "next to each bulk discount I see a link to delete it" do
+        expect(page).to have_content("Delete #{@family_discount.name}")
+        expect(page).to have_content("Delete #{@holiday_discount.name}")
+      end
+
+      it "when I click this link, I am rerdirected back to the bulk discounts index page and no longer see the discount listed" do
+        expect(page).to have_content(@family_discount.name)
+
+        click_on "Delete #{@family_discount.name}"
+        expect(page).to have_current_path(merchant_discounts_path(@merchant1))
+        expect(page).to_not have_content(@family_discount.name)
+      end
     end
   end
 end
