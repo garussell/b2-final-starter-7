@@ -4,7 +4,7 @@ class DiscountsController < ApplicationController
   end
 
   def show
-    # require 'pry';binding.pry
+    @discount = Discount.find(params[:id])
   end
 
   def new
