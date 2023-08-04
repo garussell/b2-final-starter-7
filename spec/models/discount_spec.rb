@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe Discount do
   describe "validations" do
-    it { should validate_presence_of(:quantity) }
-    it { should validate_presence_of(:percentage) }
+    it { should validate_presence_of(:discount_quantity) }
+    it { should validate_presence_of(:discount_percentage) }
   end
 
   describe "relationships" do
