@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "discount creation" do
-  before :each do
+  before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
     visit new_merchant_discount_path(@merchant1)

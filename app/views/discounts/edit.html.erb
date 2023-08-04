@@ -1,0 +1,14 @@
+<h3>Edit Discount</h3>
+<div class="ml-auto col-sm-6">
+  <section id="edit_discount_form">
+    <%= render partial: 'form', locals: {
+      path: merchant_discount_path(@merchant, @discount),
+      method: :patch,
+      value: {
+        name: @discount.name,
+        discount_quantity: @discount.discount_quantity,
+        discount_percentage: @discount.discount_percentage
+      }
+    } %>
+  </section>
+</div>
