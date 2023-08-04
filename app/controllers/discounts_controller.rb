@@ -4,7 +4,8 @@ class DiscountsController < ApplicationController
   end
 
   def show
-    @discount = Discount.find(params[:id])
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = @merchant.discounts.find(params[:id])
   end
 
   def new
@@ -22,6 +23,22 @@ class DiscountsController < ApplicationController
     else
       flash[:error] = "Invalid entry, try again."
       render :new
+    end
+  end
+
+  def edit
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = @merchant.discounts.find(params[:id])
+  end
+
+  def update
+    merchant = Merchant.find(params[:merchant_id])
+    discount = merchant.discounts.find(params[:id])
+    if discount.update(discount_params)
+      redirect_to merchant_discount_path(merchant, discount)
+    else
+      redirect_to edit_merchant_discount_path(merchant, discount)
+      flash[:alert] = "Invalid entry, try again."
     end
   end
 
