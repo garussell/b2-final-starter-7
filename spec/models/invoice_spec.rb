@@ -52,11 +52,5 @@ RSpec.describe Invoice, type: :model do
       expect(@invoice_1.revenue_after_discount).to eq(100.0)
       expect(@invoice_2.revenue_after_discount).to eq(144.0)
     end
-
-    xit "apply_discount(discount)" do
-      eligible_item = @invoice_2.eligible_for_discount.first
-      
-    
-    end
   end
 end
