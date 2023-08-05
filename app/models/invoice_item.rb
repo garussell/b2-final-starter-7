@@ -7,11 +7,17 @@ class InvoiceItem < ApplicationRecord
 
   belongs_to :invoice
   belongs_to :item
+  belongs_to :discount, optional: true
 
   enum status: [:pending, :packaged, :shipped]
 
   def self.incomplete_invoices
     invoice_ids = InvoiceItem.where("status = 0 OR status = 1").pluck(:invoice_id)
     Invoice.order(created_at: :asc).find(invoice_ids)
+  end
+
+  def apply_discount(discount)
+    self.discount = discount
+    save
   end
 end

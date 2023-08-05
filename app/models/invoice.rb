@@ -15,16 +15,20 @@ class Invoice < ApplicationRecord
     invoice_items.sum("unit_price * quantity")
   end
 
-  def elligible_for_discount
-    quantity = discounts.pluck(:discount_quantity).first
-    eligible_items = invoice_items.where("quantity >= ?", quantity)
-  end 
+  def eligible_for_discount
+    eligible_items = invoice_items.select do |invoice_item|
+      discount = invoice_item.item.discounts.where('discount_quantity <= ?', invoice_item.quantity).order(discount_quantity: :desc).first
+      discount.present?
+    end
+
+    eligible_items
+  end
 
   def discount_amount
     percentage = discounts.pluck(:discount_percentage).first
     total_discount = 0
 
-    elligible_for_discount.each do |invoice_item|
+    eligible_for_discount.each do |invoice_item|
       total_discount += invoice_item.quantity * invoice_item.unit_price * percentage
     end
  
@@ -34,4 +38,6 @@ class Invoice < ApplicationRecord
   def revenue_after_discount
     total_revenue - discount_amount
   end
+
+
 end
