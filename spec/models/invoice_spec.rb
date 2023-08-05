@@ -38,9 +38,9 @@ RSpec.describe Invoice, type: :model do
       expect(@invoice_2.total_revenue).to eq(180)
     end
 
-    it "elligible_for_discount" do
-      expect(@invoice_1.elligible_for_discount).to eq([])
-      expect(@invoice_2.elligible_for_discount).to eq([@ii_2, @ii_3])
+    it "eligible_for_discount" do
+      expect(@invoice_1.eligible_for_discount).to eq([])
+      expect(@invoice_2.eligible_for_discount).to eq([@ii_2, @ii_3])
     end
 
     it "discount_amount" do
@@ -51,6 +51,12 @@ RSpec.describe Invoice, type: :model do
     it "revenue_after_discount" do
       expect(@invoice_1.revenue_after_discount).to eq(100.0)
       expect(@invoice_2.revenue_after_discount).to eq(144.0)
+    end
+
+    xit "apply_discount(discount)" do
+      eligible_item = @invoice_2.eligible_for_discount.first
+      
+    
     end
   end
 end

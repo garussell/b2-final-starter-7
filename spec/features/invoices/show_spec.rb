@@ -4,6 +4,7 @@ RSpec.describe "invoices show" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")
+    @discount = @merchant1.discounts.create!(name: "Because I'm nice", discount_quantity: 10, discount_percentage: 0.20)
 
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -32,16 +33,16 @@ RSpec.describe "invoices show" do
 
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
-    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 2)
-    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 2)
-    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2)
-    @ii_4 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1)
-    @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
-    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1)
-    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1)
-    @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
-    @ii_10 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 1, status: 1)
-    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 12, unit_price: 6, status: 1)
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 2, discount_id: @discount.id)
+    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 2, discount_id: @discount.id)
+    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2, discount_id: @discount.id)
+    @ii_4 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1, discount_id: @discount.id)
+    @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1, discount_id: @discount.id)
+    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1, discount_id: @discount.id)
+    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1, discount_id: @discount.id)
+    @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1, discount_id: @discount.id)
+    @ii_10 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 1, status: 1, discount_id: @discount.id)
+    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 12, unit_price: 6, status: 1, discount_id: @discount.id)
 
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
@@ -118,20 +119,27 @@ RSpec.describe "invoices show" do
       end
 
       it "and I see the total discount revenue for my merchant from this invoice which includes bulk discounts in the calculation" do
-        discount = @merchant1.discounts.create!(name: "Because I'm nice", discount_quantity: 10, discount_percentage: 0.20)
+        
         
         visit merchant_invoice_path(@merchant1, @invoice_1)
-
         expect(page).to have_content("Revenue After Discounts: #{@invoice_1.revenue_after_discount}") 
       end
-
+      
       # User Story 7
       it "next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)" do
-        discount = @merchant1.discounts.create!(name: "Because I'm nice", discount_quantity: 10, discount_percentage: 0.20)
-
+        
+        
         visit merchant_invoice_path(@merchant1, @invoice_1)
-
-        # expect()
+        eligible_items = @invoice_1.eligible_for_discount
+        
+        eligible_items.each do |invoice_item|
+          expect(page).to have_link(invoice_item.item.name, href: merchant_discount_path(@merchant1, @discount))
+        end
+save_and_open_page
+        click_on eligible_items.first.item.name
+     
+        expect(page).to have_current_path(merchant_discount_path(@merchant1, @discount))
+        
       end
     end
   end
