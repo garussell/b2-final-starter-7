@@ -71,27 +71,14 @@ namespace :csv_load do
          elsif row.to_hash["status"] == "shipped"
             status = 2
          end
-         
-         item = Item.find_by(id: row["item_id"])
-         invoice = Invoice.find_by(id: row["invoice_id"])
-
-         discount = nil
-
-         if item && invoice
-            eligible_items = invoice.eligible_for_discount
-            discount = eligible_items.find_by(item_id: item.id)&.discount
-         end
-
-         InvoiceItem.create!({
-            item_id:     row["item_id"],
-            invoice_id:  row["invoice_id"],
-            quantity:    row["quantity"],
-            unit_price:  row["unit_price"],
-            status:      status,
-            created_at:  row["created_at"],
-            updated_at:  row["updated_at"],
-            discount_id: discount&.id
-         })
+         InvoiceItem.create!({ id:          row[0],
+                              item_id:     row[1],
+                              invoice_id:  row[2],
+                              quantity:    row[3],
+                              unit_price:  row[4],
+                              status:      status,
+                              created_at:  row[6],
+                              updated_at:  row[7] })
       end
       ActiveRecord::Base.connection.reset_pk_sequence!("invoice_items")
       puts "InvoiceItems imported."
