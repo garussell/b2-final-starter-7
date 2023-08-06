@@ -16,13 +16,9 @@ class Invoice < ApplicationRecord
   end
 
   def eligible_for_discount
-    eligible_items = invoice_items.select do |invoice_item|
-      discount = invoice_item.item.discounts.where('discount_quantity <= ?', invoice_item.quantity).order(discount_quantity: :desc).first
-      discount.present?
-    end
-
-    eligible_items
-  end
+    quantity = discounts.pluck(:discount_quantity).first
+    eligible_items = invoice_items.where("quantity >= ?", quantity)
+  end 
 
   def discount_amount
     percentage = discounts.pluck(:discount_percentage).first
@@ -38,6 +34,4 @@ class Invoice < ApplicationRecord
   def revenue_after_discount
     total_revenue - discount_amount
   end
-
-
 end
