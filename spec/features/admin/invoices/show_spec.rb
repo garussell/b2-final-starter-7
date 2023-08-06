@@ -54,6 +54,7 @@ describe "Admin Invoices Show Page" do
         expect(page).to_not have_content(@ii_3.quantity)
         expect(page).to_not have_content("$#{@ii_3.unit_price}")
         expect(page).to_not have_content(@ii_3.status)
+        save_and_open_page
       end
 
       it "should display the total revenue the invoice will generate" do

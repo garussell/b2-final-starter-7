@@ -1,5 +1,4 @@
 class InvoiceItem < ApplicationRecord
-  # before_create: :apply_discount
   validates_presence_of :invoice_id,
                         :item_id,
                         :quantity,
@@ -16,9 +15,4 @@ class InvoiceItem < ApplicationRecord
     invoice_ids = InvoiceItem.where("status = 0 OR status = 1").pluck(:invoice_id)
     Invoice.order(created_at: :asc).find(invoice_ids)
   end
-
-  # def apply_discount
-    # impliment a 'before' action to create the discount that applies.
-    # build the business logic to apply what ever discount is applicable depending on the holiday / sale etc
-  #end
 end
