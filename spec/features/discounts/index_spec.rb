@@ -92,6 +92,23 @@ RSpec.describe "discounts index page" do
         expect(page).to have_current_path(merchant_discounts_path(@merchant1))
         expect(page).to_not have_content(@family_discount.name)
       end
+
+      # User Story 9
+      it "I see a section with a header of 'Upcoming Holidays'" do
+        expect(page).to have_content("Upcoming Holidays")
+      end
+
+      it "In this section the name and date of the next 3 upcoming US holidays are listed" do
+        # this will fail after Labour Day
+        within("#upcoming_holidays") do
+          expect(page).to have_content("Name: Labour Day")
+          expect(page).to have_content("Date: 2023-09-04")
+          expect(page).to have_content("Name: Columbus Day")
+          expect(page).to have_content("Date: 2023-10-09")
+          expect(page).to have_content("Name: Veterans Day")
+          expect(page).to have_content("Date: 2023-11-10")
+        end
+      end
     end
   end
 end
