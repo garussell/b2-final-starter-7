@@ -134,7 +134,6 @@ RSpec.describe "invoices show" do
         end
 
         click_on eligible_items.first.item.name
-     
         expect(page).to have_current_path(merchant_discount_path(@merchant1, @discount))
       end
     end
