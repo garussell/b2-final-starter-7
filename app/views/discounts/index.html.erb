@@ -6,12 +6,14 @@
     <% @holidays.each do |holiday| %>
       <p><strong>Name: </strong><%= holiday.name %></p>
       <p><strong>Date: </strong><%= holiday.date %></p>
+      <p><%= button_to "Create #{holiday.name} Discount", new_merchant_discount_path, method: :get %></p>
     <% end %>
   </section>
 </div>
 
 <div class="ml-auto col-sm-6">
   <section id ="bulk_discounts">
+    <h3>Available Discounts</h3>
     <% @merchant.discounts.each do |discount| %>
       <strong><%= link_to discount.name, merchant_discount_path(@merchant, discount) %></strong>
       <p>Discount Quantity: <%= discount.discount_quantity %></p>

@@ -109,6 +109,46 @@ RSpec.describe "discounts index page" do
           expect(page).to have_content("Date: 2023-11-10")
         end
       end
+
+      # Extension: Create a Holiday Discount
+      it "In the Holiday Discounts section, I see a 'create discount' button next to each of the 3 upcoming holidays" do
+        within("#upcoming_holidays") do
+          expect(page).to have_button("Create Labour Day Discount")
+          expect(page).to have_button("Create Columbus Day Discount")
+          expect(page).to have_button("Create Veterans Day Discount")
+        end
+      end
+
+      it "when I click on the button I am taken to a new discount form that has the form field auto populated with the following: 'Discount: <name of holiday> Discount, Percentage Discount: 30, Quantity Threshold: 2'" do
+        save_and_open_page
+        click_on "Create Labour Day Discount"
+
+        expect(page).to have_current_path(new_merchant_discount_path(@merchant1))
+        
+        within("#create_discount_form") do
+          expect(page).to have_field("discount[name]", with: "Discount")
+          expect(page).to have_field("discount[discount_quantity]", with: "2")
+          expect(page).to have_field("discount[discount_percentage]", with: "0.3")
+        end
+      end
+
+      it "I can leave the information as is, or modify it before saving.  I should be redirected to the discounts index page where I see the mewly created discount added to the list of discounts" do
+        within("#bulk_discounts") do
+          expect(page).to_not have_content("Columbus Day Discount")
+        end
+
+        click_on "Create Columbus Day Discount"
+
+        fill_in "discount[name]", with: "Columbus Day Discount"
+        fill_in "discount[discount_quantity]", with: 5
+        fill_in "discount[discount_percentage]", with: 0.2
+        click_on "Create Discount"
+
+        expect(page).to have_current_path(merchant_discounts_path(@merchant1))
+        within("#bulk_discounts") do
+          expect(page).to have_content("Columbus Day Discount")
+        end
+      end
     end
   end
 end
