@@ -50,6 +50,7 @@ class DiscountsController < ApplicationController
     redirect_to merchant_discounts_path(merchant)
   end
 
+  
   private
   def discount_params
     params.require(:discount).permit(:name, :discount_quantity, :discount_percentage)
