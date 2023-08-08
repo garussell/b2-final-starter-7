@@ -1,13 +1,13 @@
 <div class="ml-auto col-sm-6">
   <section id="create_discount_form">
     <%= render partial: 'form', locals: {
+      model: @discount,
       path: merchant_discounts_path(@merchant, @discount),
       method: :post,
-      model: @discount,
       value: {
-        name: '<name of holiday> Discount',
-        discount_quantity: 2,
-        discount_percentage: 0.30
+        name: '',
+        discount_quantity: '',
+        discount_percentage: ''
       }
     } %>
   </section>
