@@ -6,6 +6,7 @@ ruby "3.2.2"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.5"
 gem 'faraday'
+gem 'fuzzy_match'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -55,7 +56,6 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "capybara"
   gem "factory_bot_rails"
-  gem "faker"
   gem "launchy"
   gem "orderly"
   gem "pry"

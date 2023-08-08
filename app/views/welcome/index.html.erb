@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <p>
+    If you are an admin, click <a href="/admin/dashboard">here</a> for the admin site.
+  </p>
+  
+<head>
+  <title>Little Esty Final</title>
+</head>
+<body>
+ 
+  <h2>  Welcome to Allen's Little Esty Shop B2 Final </h2>
+  <h4>Click the links below to view merchants, items, or invoice details. </h4>
+  
+  <p>
+    <strong>Merchants:</strong>
+    </p>
+   <% @merchants.each do |merchant| %>
+    <div <%= merchant.id %>>
+      <%= link_to merchant.name, merchant_dashboard_index_path(merchant) %>
+  <% end %>
+  
+  
+</body>
+</html>

@@ -120,13 +120,12 @@ RSpec.describe "discounts index page" do
       end
 
       it "when I click on the button I am taken to a new discount form that has the form field auto populated with the following: 'Discount: <name of holiday> Discount, Percentage Discount: 30, Quantity Threshold: 2'" do
-        save_and_open_page
         click_on "Create Labour Day Discount"
 
         expect(page).to have_current_path(new_merchant_discount_path(@merchant1))
         
         within("#create_discount_form") do
-          expect(page).to have_field("discount[name]", with: "Discount")
+          expect(page).to have_field("discount[name]", with: "<name of holiday> Discount")
           expect(page).to have_field("discount[discount_quantity]", with: "2")
           expect(page).to have_field("discount[discount_percentage]", with: "0.3")
         end
@@ -148,6 +147,32 @@ RSpec.describe "discounts index page" do
         within("#bulk_discounts") do
           expect(page).to have_content("Columbus Day Discount")
         end
+      end
+
+      # Extension: View a Holiday Discount
+      it "If i have created a holiday discount for a specific holiday, within the upcoming holidays section I should not see the button to create a discount next to that holiday" do
+        expect(page).to have_button("Create Labour Day Discount")
+        
+        click_on "Create Labour Day Discount"
+        fill_in "discount[name]", with: "Labour Day"
+        click_on "Create Discount"
+  
+        within("#upcoming_holidays") do
+          expect(page).to_not have_button("Create Labour Day Discount") 
+        end
+      end
+
+      it "instead I should see a 'view discount' link, when I click the link I am taken to the discount show page for that holiday discount" do
+        click_on "Create Labour Day Discount"
+        fill_in "discount[name]", with: "Labour Day"
+        click_on "Create Discount"
+  
+        within("#upcoming_holidays") do
+          expect(page).to have_link("View Discount") 
+          click_on "View Discount"
+        end
+
+        expect(page).to have_current_path(merchant_discount_path(@merchant1, Discount.find_id("Labour Day")))
       end
     end
   end
