@@ -111,6 +111,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    fuzzy_match (2.1.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -291,6 +292,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faraday
+  fuzzy_match
   importmap-rails
   jbuilder
   launchy
