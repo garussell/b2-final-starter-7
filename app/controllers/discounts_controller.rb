@@ -6,7 +6,7 @@ class DiscountsController < ApplicationController
 
   def show
     @merchant = Merchant.find(params[:merchant_id])
-    @discount = @merchant.discounts.find(params[:id])
+    @discount = Discount.find(params[:id])
   end
 
   def new
@@ -17,7 +17,8 @@ class DiscountsController < ApplicationController
   def create 
     @merchant = Merchant.find(params[:merchant_id])
     @discount = @merchant.discounts.new(discount_params)
-
+    @discount.save
+    
     if @discount.save
       flash[:success] = "Discount was created, very generous."
       redirect_to merchant_discounts_path(@merchant)
@@ -49,17 +50,9 @@ class DiscountsController < ApplicationController
 
     redirect_to merchant_discounts_path(merchant)
   end
-
-  def holiday
-    @merchant = Merchant.find(params[:merchant_id])
-    @discount = Discount.new
-
-    @selected_holiday = HolidayFacade.get_next_three_holidays.find { |holiday| holiday.name  }
-  end
   
   private
   def discount_params
     params.require(:discount).permit(:name, :discount_quantity, :discount_percentage)
   end
-
 end

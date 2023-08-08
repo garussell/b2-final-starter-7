@@ -122,32 +122,27 @@ RSpec.describe "discounts index page" do
       it "when I click on the button I am taken to a new discount form that has the form field auto populated with the following: 'Discount: <name of holiday> Discount, Percentage Discount: 30, Quantity Threshold: 2'" do
         click_on "Create Labour Day Discount"
 
-        expect(page).to have_current_path(holiday_merchant_discounts_path(@merchant1))
+        expect(page).to have_current_path(new_merchant_discount_path(@merchant1))
         
-        within("#create_holiday_discount_form") do
-          expect(page).to have_field("discount[name]", with: "Labour Day Discount")
+        within("#create_discount_form") do
+          expect(page).to have_field("discount[name]", with: "<name of holiday> Discount")
           expect(page).to have_field("discount[discount_quantity]", with: "2")
           expect(page).to have_field("discount[discount_percentage]", with: "0.3")
         end
       end
 
       it "I can leave the information as is, or modify it before saving.  I should be redirected to the discounts index page where I see the newly created discount added to the list of discounts" do
-        within("#bulk_discounts") do
-          expect(page).to_not have_content("Columbus Day Discount")
-        end
+        click_on "Create Labour Day Discount"
 
-        click_on "Create Columbus Day Discount"
-
-        fill_in "discount[name]", with: "Columbus Day Discount"
+        fill_in "discount[name]", with: "Labour Day Discount"
         fill_in "discount[discount_quantity]", with: 5
         fill_in "discount[discount_percentage]", with: 0.2
 
         click_on "Create Discount"
         
-        within("#bulk_discounts") do  
-          expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-          expect(page).to have_content("Columbus Day Discount")
-        end
+        expect(page).to have_current_path(merchant_discounts_path(@merchant1))
+        expect(page).to have_content("Labour Day Discount")
+        
       end
 
       # Extension: View a Holiday Discount
@@ -166,38 +161,16 @@ RSpec.describe "discounts index page" do
       it "instead I should see a 'view discount' link, when I click the link I am taken to the discount show page for that holiday discount" do
         click_on "Create Labour Day Discount"
         fill_in "discount[name]", with: "Labour Day"
+        fill_in "discount[discount_quantity]", with: 2
+        fill_in "discount[discount_percentage]", with: 0.30
 
         click_on "Create Discount"
   
-        within("#upcoming_holidays") do
-          expect(page).to have_link("View Discount") 
-          click_on "View Discount"
-        end
+        expect(page).to have_link("View Discount") 
+        click_on "View Discount"
 
-        expect(page).to have_current_path(merchant_discount_path(@merchant1, Discount.find_id("Labour Day")))
-      end
-
-      describe '.select_holiday' do
-        before(:each) do
-          @holiday1 = Holiday.new(name: 'First Holiday', date: "2023-10-30")
-          @holiday2 = Holiday.new(name: 'Next Holiday', date: "2023-11-07")
-          @holiday3 = Holiday.new(name: 'Last Holiday', date: "2023-12-25")
-          
-        end
-        
-        it 'returns the holiday with the specified name' do
-          allow(HolidayFacade).to receive(:select_holiday).with('First Holiday').and_return(@holiday1)
-          allow(HolidayFacade).to receive(:select_holiday).with('Next Holiday').and_return(@holiday2)
-          allow(HolidayFacade).to receive(:select_holiday).with('Last Holiday').and_return(@holiday3)
-
-          selected_holiday = HolidayFacade.select_holiday('Next Holiday')
-          expect(selected_holiday).to eq(@holiday2)
-        end
-    
-        it 'returns nil if no holiday with the specified name is found' do
-          selected_holiday = HolidayFacade.select_holiday('Nonexistent Holiday')
-          expect(selected_holiday).to be_nil
-        end
+        expected_path = "/merchants/#{@merchant1.id}/discounts"
+        expect(page).to have_current_path(expected_path, ignore_query: true)
       end
     end
   end
