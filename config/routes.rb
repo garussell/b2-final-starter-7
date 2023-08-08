@@ -4,11 +4,7 @@ Rails.application.routes.draw do
     resources :items, except: [:destroy]
     resources :item_status, only: [:update]
     resources :invoices, only: [:index, :show, :update]
-    resources :discounts  do
-      collection do
-        get 'holiday'
-      end
-    end
+    resources :discounts
   end
 
   namespace :admin do
