@@ -120,7 +120,6 @@ RSpec.describe "discounts index page" do
       end
 
       it "when I click on the button I am taken to a new discount form that has the form field auto populated with the following: 'Discount: <name of holiday> Discount, Percentage Discount: 30, Quantity Threshold: 2'" do
-        save_and_open_page
         click_on "Create Labour Day Discount"
 
         expect(page).to have_current_path(new_merchant_discount_path(@merchant1))

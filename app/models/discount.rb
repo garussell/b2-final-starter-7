@@ -7,7 +7,6 @@ class Discount < ApplicationRecord
 
 
   def self.discount_exists?(discount)
-    where(name: discount)
-      .exists?
+    where("LOWER(name) LIKE ?", "%#{discount.downcase}%").exists?
   end
 end

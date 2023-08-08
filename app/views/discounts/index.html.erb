@@ -7,7 +7,7 @@
       <p><strong>Name: </strong><%= holiday.name %></p>
       <p><strong>Date: </strong><%= holiday.date %></p>
      
-      <% if Discount.discount_exists?("#{holiday.name} Discount") %>
+      <% if Discount.discount_exists?("#{holiday.name}") %>
         <p>Generous</p>
       <% else %>
         <p><%= button_to "Create #{holiday.name} Discount", new_merchant_discount_path, method: :get %></p>
