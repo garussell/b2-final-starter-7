@@ -7,15 +7,9 @@
       <p><strong>Name: </strong><%= holiday.name %></p>
       <p><strong>Date: </strong><%= holiday.date %></p>
      
-      <% if Discount.discount_exists?(holiday.name) %>
-        <div>
-          <p><%= link_to "View Discount", url: "/merchants/#{@merchant.id}/discounts/#{Discount.find_id(holiday.name)}" %></p>
-        </div>
-      <% else %>
-        <div>
-          <p><%= button_to "Create #{holiday.name} Discount", new_merchant_discount_path(@merchant), method: :get, data: { turbo: false } %></p>
-        </div>
-      <% end %>
+      <div>
+        <%= holiday_discount_urls(@merchant, holiday) %>
+      </div>
       
     <% end %>
   </section>
