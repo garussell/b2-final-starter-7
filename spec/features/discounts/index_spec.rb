@@ -150,12 +150,29 @@ RSpec.describe "discounts index page" do
       end
 
       # Extension: View a Holiday Discount
-      it "If i have created a holiday discount for a specific holiday, within the upcoming holidays section I should not see the botton to create a discount next to that holiday" do
-          
+      it "If i have created a holiday discount for a specific holiday, within the upcoming holidays section I should not see the button to create a discount next to that holiday" do
+        expect(page).to have_button("Create Labour Day Discount")
+        
+        click_on "Create Labour Day Discount"
+        fill_in "discount[name]", with: "Labour Day"
+        click_on "Create Discount"
+  
+        within("#upcoming_holidays") do
+          expect(page).to_not have_button("Create Labour Day Discount") 
+        end
       end
 
       it "instead I should see a 'view discount' link, when I click the link I am taken to the discount show page for that holiday discount" do
+        click_on "Create Labour Day Discount"
+        fill_in "discount[name]", with: "Labour Day"
+        click_on "Create Discount"
+  
+        within("#upcoming_holidays") do
+          expect(page).to have_link("View Discount") 
+          click_on "View Discount"
+        end
 
+        expect(page).to have_current_path(merchant_discount_path(@merchant1, Discount.find_id("Labour Day")))
       end
     end
   end

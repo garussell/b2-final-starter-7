@@ -28,6 +28,15 @@ describe Discount do
 
         expect(Discount.discount_exists?("family discount")).to be true
         expect(Discount.discount_exists?("Holiday")).to be true
+        
+        # FuzzyMatch implementation
+        # expect(Discount.discount_exists?("famly discont")).to be true
+      end
+    end
+
+    describe "find_id" do
+      it "can find the id associated with the discount by name" do
+        expect(Discount.find_id(@family_discount.name)).to eq(@family_discount.id)
       end
     end
   end
