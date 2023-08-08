@@ -50,9 +50,16 @@ class DiscountsController < ApplicationController
     redirect_to merchant_discounts_path(merchant)
   end
 
+  def holiday
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = Discount.new
+
+    @selected_holiday = HolidayFacade.get_next_three_holidays.find { |holiday| holiday.name  }
+  end
   
   private
   def discount_params
     params.require(:discount).permit(:name, :discount_quantity, :discount_percentage)
   end
+
 end
