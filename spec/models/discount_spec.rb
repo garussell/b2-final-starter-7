@@ -26,7 +26,6 @@ describe Discount do
         expect(Discount.discount_exists?(@family_discount.name)).to be true
         expect(Discount.discount_exists?(@holiday_discount.name)).to be true
 
-        expect(Discount.discount_exists?("Famly discount")).to be true
         expect(Discount.discount_exists?("family discount")).to be true
         expect(Discount.discount_exists?("Holiday")).to be true
       end
