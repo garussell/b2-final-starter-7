@@ -126,7 +126,7 @@ RSpec.describe "discounts index page" do
         expect(page).to have_current_path(new_merchant_discount_path(@merchant1))
         
         within("#create_discount_form") do
-          expect(page).to have_field("discount[name]", with: "Discount")
+          expect(page).to have_field("discount[name]", with: "<name of holiday> Discount")
           expect(page).to have_field("discount[discount_quantity]", with: "2")
           expect(page).to have_field("discount[discount_percentage]", with: "0.3")
         end

@@ -4,4 +4,10 @@ class Discount < ApplicationRecord
                         :discount_percentage
   belongs_to :merchant
   has_many :items, through: :merchant
+
+
+  def self.discount_exists?(discount)
+    where(name: discount)
+      .exists?
+  end
 end
