@@ -8,10 +8,11 @@
       <p><strong>Date: </strong><%= holiday.date %></p>
      
       <% if Discount.discount_exists?("#{holiday.name}") %>
-        <p>Generous</p>
+        <p><%= link_to @discount.name, merchant_discount_path(@merchant, @discount) %></p>
       <% else %>
         <p><%= button_to "Create #{holiday.name} Discount", new_merchant_discount_path, method: :get %></p>
       <% end %>
+    
     <% end %>
   </section>
 </div>

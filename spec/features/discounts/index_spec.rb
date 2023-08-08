@@ -148,6 +148,15 @@ RSpec.describe "discounts index page" do
           expect(page).to have_content("Columbus Day Discount")
         end
       end
+
+      # Extension: View a Holiday Discount
+      it "If i have created a holiday discount for a specific holiday, within the upcoming holidays section I should not see the botton to create a discount next to that holiday" do
+          
+      end
+
+      it "instead I should see a 'view discount' link, when I click the link I am taken to the discount show page for that holiday discount" do
+
+      end
     end
   end
 end
