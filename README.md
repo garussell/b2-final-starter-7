@@ -1,5 +1,6 @@
 # Bulk Discounts
 
+
 ## Description
 
 The "Litte Etsy Shop" is an application that mimics an e-commerce platform.

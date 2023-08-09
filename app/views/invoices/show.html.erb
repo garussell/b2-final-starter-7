@@ -36,7 +36,7 @@
               <td style="text-align:center">
                 
                 <% if @invoice.eligible_for_discount.include?(i) %>
-                  <%= link_to i.item.name, merchant_discount_path(@merchant, i.discount) %>
+                  <%= link_to i.item.name, merchant_discount_path(@merchant, i.item) %>
                 <% else %>
                   <%= i.item.name %>
                 <% end %>
