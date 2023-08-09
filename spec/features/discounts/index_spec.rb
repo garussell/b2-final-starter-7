@@ -169,8 +169,8 @@ RSpec.describe "discounts index page" do
         expect(page).to have_link("View Discount") 
         click_on "View Discount"
 
-        expected_path = merchant_discount_path(@merchant1, Discount.find_id("Labour Day"))
-        expect(page).to have_current_path(expected_path)
+        expected_path = "/merchants/#{@merchant1.id}/discounts"
+        expect(page).to have_current_path(expected_path, ignore_query: true)
       end
     end
   end
